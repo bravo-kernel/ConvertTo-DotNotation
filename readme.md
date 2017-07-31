@@ -2,16 +2,18 @@
 
 # ConvertTo-DotNotation
 
-Powershell module for converting (deeply nested) hashes to dot-notation
+Powershell module for converting (deeply nested) hashes to dot-notation.
 
 ```posh
 ConvertTo-DotNotation -Hash $someHash
 ```
 
-## Usage
+## Example
+
+Given the following nested hash as input:
 
 ```posh
-[hashtable]$hash = @{
+[hashtable]$myHash = @{
     "key1" = "key1value"
     "subhash1" = @{
         "subhash1key1" = "subhash1key1value"
@@ -20,8 +22,17 @@ ConvertTo-DotNotation -Hash $someHash
         }
     }
 }
+```
 
-ConvertTo-DotNotation -Hash $someHash
+You can create the dotted hash by running:
+
+```posh
+ConvertTo-DotNotation -Hash $myHash
+```
+
+Which would result in the following single-dimensional hash using dot-notation as key names.:
+
+```posh
 
 IsPublic IsSerial Name                                     BaseType
 -------- -------- ----                                     --------
@@ -41,4 +52,14 @@ Name  : subhash1.subhash1key1
 Key   : key1
 Value : key1value
 Name  : key1
+```
+
+or in more readable JSON format:
+
+```json
+{
+    "key1":  "key1value",
+    "subhash1.subhash1key1":  "subhash1key1value",
+    "subhash1.subhash2.subhash2key1":  "subhash2key1value"
+}
 ```
