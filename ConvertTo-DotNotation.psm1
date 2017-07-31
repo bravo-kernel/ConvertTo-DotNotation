@@ -142,8 +142,13 @@ function dotRecurse() {
         }
 
         # Call our self recursively but reset the dotpath so we start all over again
-        Write-Verbose "Recursing with empty DotPath to process remaining hash"
-        dotRecurse -Hash $Hash -DotPath ""
+        # unless... the hash is empty, in that case simply continue/exit.
+        if ($Hash.Count -eq 0) {
+            Write-Verbose "Stop recursing, hash is empty"
+        } else {
+            Write-Verbose "Recursing with empty DotPath to process remaining hash"
+            dotRecurse -Hash $Hash -DotPath ""
+        }
     }
 }
 
