@@ -1,10 +1,46 @@
 
+skip_commits:
+  message: /^.*readme.*$/
+
 install:
   - cinst pester -y
+  - ps: Install-PackageProvider -Name NuGet -Force
+  - ps: Install-Module PsScriptAnalyzer -Force
 
 build: false
 
 test_script:
-  - ps: $res = Invoke-Pester -Path ".\Tests" -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru
-  - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestsResults.xml))
-  - ps: if ($res.FailedCount -gt 0) { throw "$($res.FailedCount) tests failed."}
+  - ps: |
+      # ====================================
+      #  PSscriptAnalyzer
+      # ====================================
+      Write-Host 'Validating coding standards using PSScriptAnalyser...'
+
+      # Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
+      # $res = Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue
+
+      # If ($res) {
+      #   $resultString = $res | Out-String
+      #   Write-Warning $resultString
+      #   Add-AppveyorMessage -Message "PSScriptAnalyzer output contained one or more violations.`
+      #   Check the 'Tests' tab of this build for more details." -Category Error
+      #   Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Failed -ErrorMessage $ResultString
+
+      #   Throw "Build failed due to coding standard violations"
+      # }
+      # Else {
+      #   Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
+      # }
+
+      # ====================================
+      #  Pester tests
+      # ====================================
+      Write-Host "Running tests using Pester..."
+
+      $testResultsFile = ".\TestsResults.xml"
+      $res = Invoke-Pester -Path ".\Tests" -OutputFormat NUnitXml -OutputFile $testResultsFile -PassThru -CodeCoverage *.psm1
+      (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestsResults.xml))
+
+      If ($res.FailedCount -gt 0) {
+        Throw "Build failed due to $($res.FailedCount) failing tests"
+      }
