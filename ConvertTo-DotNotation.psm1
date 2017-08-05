@@ -1,14 +1,14 @@
-<#
-    .SYNOPSIS
-    Converts a hash into an array with key/value pairs using dot-notation as the key.
-    .PARAMETER Hash
-    Hash to be converted (any depth)
-    .LINK
-    http://github.com/alt3/ConvertTo-DotNotation
-#>
 Set-StrictMode -Version Latest
 
 function ConvertTo-DotNotation() {
+    <#
+        .SYNOPSIS
+        Converts a hash into an array with key/value pairs using dot-notation as the key.
+        .PARAMETER Hash
+        Hash to be converted (any depth)
+        .LINK
+        http://github.com/alt3/ConvertTo-DotNotation
+    #>
     [cmdletbinding()]
     param(
         [Parameter()]
@@ -45,15 +45,13 @@ function dotRecurse() {
         Invoke-Expression "`$tempHash = `$Hash.$DotPath"
     }
 
-    if ($tempHash -eq $null) {
+    if ($null -eq $tempHash) {
         throw "Passed -DotPath argument '$DotPath' did not result in an extracted hash."
     }
 
     write-verbose "------------------------------"
     Write-Verbose "Begin function"
     write-verbose "Hash keys in DotPath '$DotPath':"
-
-    $hashKeys = $tempHash.keys
 
     foreach ($hashKey in $tempHash.keys) {
         Write-Verbose "=> $hashKey"
