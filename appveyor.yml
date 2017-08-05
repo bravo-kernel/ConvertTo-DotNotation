@@ -6,15 +6,14 @@ install:
   - cinst pester -y
   - ps: Install-PackageProvider -Name NuGet -Force
   - ps: Install-Module PsScriptAnalyzer -Force
+  - ps: Install-Module coveralls -Force
 
 build: false
 
 test_script:
   - ps: |
-      # ====================================
       #  PSscriptAnalyzer
-      # ====================================
-      Write-Host 'Validating coding standards using PSScriptAnalyser...'
+      Write-Host 'Running PSScriptAnalyser coding standards analysis...'
 
       # Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
       # $res = Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue
@@ -32,10 +31,8 @@ test_script:
       #   Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
       # }
 
-      # ====================================
-      #  Pester tests
-      # ====================================
-      Write-Host "Running tests using Pester..."
+      #  Pester
+      Write-Host "Running Pester unit tests..."
 
       $testResultsFile = ".\TestsResults.xml"
       $res = Invoke-Pester -Path ".\Tests" -OutputFormat NUnitXml -OutputFile $testResultsFile -PassThru -CodeCoverage *.psm1
@@ -44,3 +41,11 @@ test_script:
       If ($res.FailedCount -gt 0) {
         Throw "Build failed due to $($res.FailedCount) failing tests"
       }
+
+      #  Coveralls
+      Write-Host "Generating Coveralls code coverage report..."
+
+      $files = Get-ChildItem * -Include *.ps1,*.psm1
+      $token = 'ObxiFdeVVwlsneHqQqf5sAjdWIWiCi32X'
+      $coverage = Format-Coverage -PesterResults $res -CoverallsApiToken $token
+      Publish-Coverage -Coverage $coverage

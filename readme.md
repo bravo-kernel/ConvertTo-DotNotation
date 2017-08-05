@@ -1,4 +1,5 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/nhonfjdp03hbfif8/branch/master?svg=true)](https://ci.appveyor.com/project/alt3/convertto-dotnotation)
+[![Coverage Status](https://coveralls.io/repos/github/alt3/ConvertTo-DotNotation/badge.svg)](https://coveralls.io/github/alt3/ConvertTo-DotNotation)
 
 # ConvertTo-DotNotation
 
