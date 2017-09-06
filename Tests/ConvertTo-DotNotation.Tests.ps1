@@ -61,18 +61,18 @@ Describe "ConvertTo-DotNotation PS$PSVersion" {
         }
 
         It "makes sure the resultant hash contains the expected dot-notated key names" {
-            $dotted."mainkey1" | Should BeExactly mainkey1value
-            $dotted."mainkey2" | Should BeExactly mainkey2value
+            $dotted."mainkey1" | Should BeExactly "mainkey1value"
+            $dotted."mainkey2" | Should BeExactly "mainkey2value"
 
-            $dotted."hash1.hash1key1" | Should BeExactly hash1key1value
-            $dotted."hash1.subhash2.subhash2key1" | Should BeExactly subhash2key1value
-            $dotted."hash1.subhash2.subhash2key2" | Should BeExactly subhash2key2value
-            $dotted."hash1.subhash2.subhash3.subhash3key1" | Should BeExactly subhash3key1value
-            $dotted."hash1.subhash2.subhash3.subhash4.subhash4key1" | Should BeExactly subhash4key1value
-            $dotted."hash1.subhash2.subhash3.subhash4.subhash4key2" | Should BeExactly subhash4key2value
+            $dotted."hash1.hash1key1" | Should BeExactly "hash1key1value"
+            $dotted."hash1.subhash2.subhash2key1" | Should BeExactly "subhash2key1value"
+            $dotted."hash1.subhash2.subhash2key2" | Should BeExactly "subhash2key2value"
+            $dotted."hash1.subhash2.subhash3.subhash3key1" | Should BeExactly "subhash3key1value"
+            $dotted."hash1.subhash2.subhash3.subhash4.subhash4key1" | Should BeExactly "subhash4key1value"
+            $dotted."hash1.subhash2.subhash3.subhash4.subhash4key2" | Should BeExactly "subhash4key2value"
 
-            $dotted."hash2.hash2key1" | Should BeExactly hash2key1value
-            $dotted."hash2.hash2key2" | Should BeExactly hash2key2value
+            $dotted."hash2.hash2key1" | Should BeExactly "hash2key1value"
+            $dotted."hash2.hash2key2" | Should BeExactly "hash2key2value"
         }
 
         It "makes sure the key with the empty subhash is not added to the resultant hash" {
@@ -100,7 +100,7 @@ Describe "ConvertTo-DotNotation PS$PSVersion" {
 
         It "makes sure passing a single-dimensional hash does not break the module" {
             $dotted.count | Should BeExactly 1
-            $dotted."x" | Should BeExactly y
+            $dotted."x" | Should BeExactly "y"
         }
 
         # ======================================================
@@ -116,7 +116,7 @@ Describe "ConvertTo-DotNotation PS$PSVersion" {
 
         It "makes sure passing a multi-dimensional hash without root keys does not break the module" {
             $dotted.count | Should BeExactly 1
-            $dotted."subhash1.subhash1key1" | Should BeExactly subhash1key1value
+            $dotted."subhash1.subhash1key1" | Should BeExactly "subhash1key1value"
         }
     }
 }

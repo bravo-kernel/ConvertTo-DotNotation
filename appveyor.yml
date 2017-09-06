@@ -15,21 +15,21 @@ test_script:
       #  PSscriptAnalyzer
       Write-Host 'Running PSScriptAnalyser coding standards analysis...'
 
-      # Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
-      # $res = Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue
+      Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
+      $res = Invoke-ScriptAnalyzer -Path $pwd -Recurse -ErrorAction SilentlyContinue -ExcludeRule PSAvoidUsingInvokeExpression
 
-      # If ($res) {
-      #   $resultString = $res | Out-String
-      #   Write-Warning $resultString
-      #   Add-AppveyorMessage -Message "PSScriptAnalyzer output contained one or more violations.`
-      #   Check the 'Tests' tab of this build for more details." -Category Error
-      #   Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Failed -ErrorMessage $ResultString
+      If ($res) {
+        $resultString = $res | Out-String
+        Write-Warning $resultString
+        Add-AppveyorMessage -Message "PSScriptAnalyzer output contained one or more violations.`
+        Check the 'Tests' tab of this build for more details." -Category Error
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Failed -ErrorMessage $ResultString
 
-      #   Throw "Build failed due to coding standard violations"
-      # }
-      # Else {
-      #   Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
-      # }
+        Throw "Build failed due to coding standard violations"
+      }
+      Else {
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
+      }
 
       #  Pester
       Write-Host "Running Pester unit tests..."

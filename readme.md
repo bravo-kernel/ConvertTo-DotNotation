@@ -31,7 +31,7 @@ You can create the dotted hash by running:
 ConvertTo-DotNotation -Hash $myHash
 ```
 
-Which would result in the following single-dimensional hash using dot-notation as key names.:
+Which would result in the following single-dimensional hash with dot-notated key names:
 
 ```posh
 
