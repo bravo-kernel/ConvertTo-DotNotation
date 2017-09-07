@@ -26,8 +26,6 @@ function ConvertTo-DotNotation() {
         }
     }
 
-    write-host "Moet kapot"
-
     Return $result
 }
 
